@@ -9,6 +9,28 @@
 #import "ViewController.h"
 #import <objc/runtime.h>
 
+@protocol TestProtocol
+
+- (void)testFunc1:(NSString *)str;
+- (void)testFunc2;
+
+@optional
+- (void)testFunc3;
+
+@end
+
+@interface TestObject : NSObject <TestProtocol>
+
+@end
+
+@implementation TestObject
+
+- (void)testFunc1:(NSString *)str {
+    NSLog(@"testFunc1");
+}
+
+@end
+
 @interface ViewController ()
 
 @end
@@ -20,17 +42,29 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     unsigned int count;
-    Method *methods = class_copyMethodList([self class], &count);
+    Method *methods = class_copyMethodList([TestObject class], &count);
     for (unsigned int i = 0; i < count; i++) {
         NSLog(@"%s", sel_getName(method_getName(methods[i])));
     }
+    
+    Protocol * __unsafe_unretained _Nonnull * _Nullable protocols = class_copyProtocolList([TestObject class], &count);
+    for (unsigned int i = 0; i < count; i++) {
+        unsigned int count2;
+        struct objc_method_description *methodsDesc = protocol_copyMethodDescriptionList(protocols[i], YES, YES, &count2);
+        for (unsigned int i = 0; i < count2; i++) {
+            NSLog(@"%s", sel_getName(methodsDesc[i].name));
+        }
+    }
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+
+- (void)test {
+    NSLog(@"test");
+}
 
 @end

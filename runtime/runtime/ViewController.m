@@ -13,9 +13,10 @@
 
 - (void)testFunc1:(NSString *)str;
 - (void)testFunc2;
+- (void)testFunc3:(NSString *)str num:(NSInteger)num;
 
 @optional
-- (void)testFunc3;
+- (void)testFunc4;
 
 @end
 
@@ -46,13 +47,18 @@
     for (unsigned int i = 0; i < count; i++) {
         NSLog(@"%s", sel_getName(method_getName(methods[i])));
     }
-    
-    Protocol * __unsafe_unretained _Nonnull * _Nullable protocols = class_copyProtocolList([TestObject class], &count);
+
+    TestObject *obj = [[TestObject alloc] init];
+    Protocol * __unsafe_unretained _Nonnull * _Nullable protocols = class_copyProtocolList([obj class], &count);
     for (unsigned int i = 0; i < count; i++) {
         unsigned int count2;
         struct objc_method_description *methodsDesc = protocol_copyMethodDescriptionList(protocols[i], YES, YES, &count2);
         for (unsigned int i = 0; i < count2; i++) {
-            NSLog(@"%s", sel_getName(methodsDesc[i].name));
+            //            NSString *name = [NSString stringWithUTF8String:sel_getName(methodsDesc[i].name)];
+            //            SEL selector = NSSelectorFromString(name);
+            SEL selector = methodsDesc[i].name;
+            BOOL res = [obj respondsToSelector:selector];
+            NSLog(@"%d", res);
         }
     }
 }

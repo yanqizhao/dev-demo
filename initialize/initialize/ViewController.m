@@ -46,17 +46,18 @@
 @implementation SubClass
 
 + (void)load {
+//    [super load];
     NSLog(@"SubClass load");
 //    [super load];
 }
 
-+ (void)initialize {
+//+ (void)initialize {
 //    [super initialize];
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSLog(@"SubClass initialize");
-    });
-}
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//        NSLog(@"SubClass initialize");
+//    });
+//}
 
 @end
 
@@ -72,10 +73,13 @@
 }
 
 //+ (void)initialize {
+//    [super initialize];
+//    [super initialize];
 //    static dispatch_once_t onceToken;
 //    dispatch_once(&onceToken, ^{
 //        NSLog(@"FinalClass initialize");
 //    });
+//    [super initialize];
 //}
 
 @end
@@ -104,6 +108,7 @@
     
 //    FinalClass *final = [FinalClass new];
     [FinalClass self];
+//    SubClass *sub = [SubClass new];
 }
 
 - (void)didReceiveMemoryWarning {
